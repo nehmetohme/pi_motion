@@ -1,6 +1,10 @@
 package ch.abtomik.kura.example.motion_osgi;
+
+import java.util.Map;
 import java.io.IOException;
 import org.eclipse.kura.configuration.ConfigurableComponent;
+import static org.eclipse.kura.camel.component.Configuration.asInt;
+import static org.eclipse.kura.camel.component.Configuration.asString;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -17,6 +21,7 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.Pin;
 
 
 @Designate(ocd = Config.class)
@@ -34,13 +39,22 @@ public class MotionOsgi implements ConfigurableComponent {
     private static final String APP_ID = "ch.abtomik.kura.example.motion_osgi";
 
     @Activate
-    public void activate() {
+    public void activate(final Map<String, ?> properties) throws Exception {
         System.out.println("activate");
+
+        //fetch the Led Light Pin Number from the properties
+        int ledPinNumber = asInt(properties, "ledPinNumber", 1);
+        //int ledPinNumber = 01;
+
+
+        //fetch the Motion Detection Pin Number from the properties 
+        int motionSensorPinNumber = asInt(properties, "sensor",0);
+        //int motionSensorPinNumber = 00;
         gpioSensor = GpioFactory.getInstance();    
-        sensor = gpioSensor.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_DOWN);
+        sensor = gpioSensor.provisionDigitalInputPin(getPinId(motionSensorPinNumber), PinPullResistance.PULL_DOWN);
 
         gpioLed = GpioFactory.getInstance();
-        led = gpioLed.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
+        led = gpioLed.provisionDigitalOutputPin(getPinId(ledPinNumber), "MyLED", PinState.HIGH);
 
         detectMotion(sensor,led);
     }
@@ -99,5 +113,54 @@ public class MotionOsgi implements ConfigurableComponent {
           }
         }
       });
+    }
+
+    private Pin getPinId(Integer pinId) {
+    	switch(pinId.intValue()){
+    	case 0:
+    		return RaspiPin.GPIO_00;
+    	case 1:
+    		return RaspiPin.GPIO_01;
+    	case 2:
+    		return RaspiPin.GPIO_02;
+    	case 3:
+    		return RaspiPin.GPIO_03;
+    	case 4:
+    		return RaspiPin.GPIO_04;
+    	case 5:
+    		return RaspiPin.GPIO_05;
+    	case 6:
+    		return RaspiPin.GPIO_06;
+    	case 7:
+    		return RaspiPin.GPIO_07;
+    	case 8:
+    		return RaspiPin.GPIO_08;
+    	case 9:
+    		return RaspiPin.GPIO_09;
+    	case 10:
+    		return RaspiPin.GPIO_10;
+    	case 11:
+    		return RaspiPin.GPIO_11;
+    	case 12:
+    		return RaspiPin.GPIO_12;
+    	case 13:
+    		return RaspiPin.GPIO_13;
+    	case 14:
+    		return RaspiPin.GPIO_14;
+    	case 15:
+    		return RaspiPin.GPIO_15;
+    	case 16:
+    		return RaspiPin.GPIO_16;
+    	case 17:
+    		return RaspiPin.GPIO_17;
+    	case 18:
+    		return RaspiPin.GPIO_18;
+    	case 19:
+    		return RaspiPin.GPIO_19;
+    	case 20:
+    		return RaspiPin.GPIO_20;
+    	default:
+    		throw new IllegalArgumentException("endereco inexistente.");
+    	}
     }
 }

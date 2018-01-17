@@ -2,18 +2,39 @@ package ch.abtomik.kura.example.motion_osgi;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.osgi.service.metatype.annotations.AttributeType;
 
-/**
- * Meta type information for {@link MotionOsgi }
- * <p>
- * <strong>Note: </strong> The id must be the full qualified name of the assigned component.
- * </p>
- */
+
 @ObjectClassDefinition(id="ch.abtomik.kura.example.motion_osgi.MotionOsgi", name="LED RPI", description="Simple RPI LED example")
+/*
 @interface Config {
-        @AttributeDefinition(name = "Some string", description = "This is just some string value")
-        String someString() default "Hello World";
-
         @AttributeDefinition(name = "Enabled", description = "Whether the component is enabled or not")
         boolean enabled() default true;
+
+        //@AttributeDefinition(name = "Motion Detection Sensor Pin Number", required = true)
+        //public int motionSensorPinNumber() default 0;
+
+        @AttributeDefinition(name = "Led Pin Number", required = true)
+        public int ledPinNumber() default 1;
+
+        @AttributeDefinition(name = "Dummy Field")
+        public String dummyField() default "test";
 }
+*/
+@interface Config {
+
+    @AttributeDefinition(
+        name = "Led Pin Number",
+        description = "Please specify the led pin number.",
+        type = AttributeType.LONG
+    )
+    public int led() default 1;
+
+    @AttributeDefinition(
+        name = "Motion Detector Pin Number",
+        description = "Please specify the motion detection sensor pin number.",
+        type = AttributeType.LONG
+    )
+    public int sensor() default 0;
+}
+
