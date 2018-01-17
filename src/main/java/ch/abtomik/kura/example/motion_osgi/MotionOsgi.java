@@ -160,7 +160,7 @@ public class MotionOsgi implements ConfigurableComponent {
     	case 20:
     		return RaspiPin.GPIO_20;
     	default:
-    		throw new IllegalArgumentException("endereco inexistente.");
+    		throw new IllegalArgumentException("pinId doesn't exist.");
     	}
     }
 }
